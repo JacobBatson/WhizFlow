@@ -1,10 +1,10 @@
 // server.js
 require('dotenv').config();
-const express       = require('express');
-const mongoose      = require('mongoose');
-const session       = require('express-session');
-const passport      = require('passport');
-const path          = require('path');
+const express = require('express');
+const mongoose = require('mongoose');
+const session = require('express-session');
+const passport = require('passport');
+const path = require('path');
 
 const app = express();
 app.use(express.json());
@@ -13,7 +13,7 @@ app.use(express.json());
 // 1) MONGO CONNECTION
 // ——————————————
 console.log('MONGO_URI:', process.env.MONGO_URI);
-mongoose.connect(process.env.MONGO_URI)
+mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('✅ Connected to MongoDB'))
   .catch(err => console.error('❌ DB connection error:', err));
 
@@ -22,8 +22,8 @@ mongoose.connect(process.env.MONGO_URI)
 // ——————————————
 // (a) Session middleware
 app.use(session({
-  secret:   process.env.SESSION_SECRET, 
-  resave:   false,
+  secret: process.env.SESSION_SECRET,
+  resave: false,
   saveUninitialized: false
 }));
 
@@ -32,7 +32,6 @@ app.use(passport.initialize());
 app.use(passport.session());
 
 // (c) Load your Passport strategy config
-//    Create this file next (see below)
 require('./config/passport');
 
 // ——————————————
@@ -46,8 +45,8 @@ app.use('/api/users', require('./routes/userRoutes'));
 
 // (c) Test or protected route
 app.get('/', (req, res) => {
-  res.send(req.user 
-    ? `Hello ${req.user.name}!` 
+  res.send(req.user
+    ? `Hello ${req.user.name}!`
     : 'Hello from TaskWhiz backend!'
   );
 });
@@ -55,12 +54,12 @@ app.get('/', (req, res) => {
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get(
-    '/auth/google/callback',
-    passport.authenticate('google', { failureRedirect: '/' }),
-    (req, res) => {
-      // Successful authentication
-      res.redirect('/dashboard'); // Redirect to a protected route
-    }
+  '/auth/google/callback',
+  passport.authenticate('google', { failureRedirect: '/' }),
+  (req, res) => {
+    // Successful authentication
+    res.redirect('/dashboard'); // Redirect to a protected route
+  }
 );
 
 // ——————————————
@@ -70,9 +69,9 @@ console.log('Serving static files from:', path.join(__dirname, 'frontend'));
 app.use('/WhizFlow/frontend', express.static(path.join(__dirname, 'frontend')));
 
 // ——————————————
-// 5) START SERVER
+// 5) TASK API
 // ——————————————
-const PORT = process.env.PORT || 5500;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
@@ -90,22 +89,28 @@ const taskScheme = new mongoose.Schema({
     task: {type: String, required: true},
     createdAt: {type: Date, default: Date.npw}
 });
-const Task = mongoose.model('Task', taskScheme);
+const Task = mongoose.model('Task', taskSchema);
+
 app.post('/api/tasks', async (req, res) => {
-    const{ task } = re.body;
-    if(!task || task.trim() === ''){
-        return res.status(400).jason({error: 'Task description is required'});
-    }
+  const { task } = req.body;
+  if (!task || task.trim() === '') {
+    return res.status(400).json({ error: 'Task description is required' });
+  }
 
-    try {
-        const newTask = new Task({ task});
-        await newTask.save();
+  try {
+    const newTask = new Task({ task });
+    await newTask.save();
 
-        res.status(201).json({ message: 'Task created successfully', task: newTask });
-    } catch (error){
-        res.status(500).jsaon({ eroor: 'failed to create task. Please try again later', error: error.message });
-    }
+    res.status(201).json({ message: 'Task created successfully', task: newTask });
+  } catch (error) {
+    res.status(500).json({ error: 'Failed to create task. Please try again later', details: error.message });
+  }
 });
-app.listen(port, () => {
-    console.log('Backend running at http://localhost;${port}');
-})
+
+// ——————————————
+// 6) START SERVER
+// ——————————————
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+  console.log(`🚀 Backend running at http://localhost:${PORT}`);
+});

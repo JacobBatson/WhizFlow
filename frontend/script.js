@@ -59,3 +59,10 @@ function updateHistory(task) {
     <ul>${taskHistory.map(t => `<li>${t}</li>`).join('')}</ul>
   `;
 }
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const icon = document.querySelector('#themeToggle i');
+  document.body.classList.toggle('dark');
+  icon.classList.toggle('fa-moon');
+  icon.classList.toggle('fa-sun');
+});

@@ -1,110 +1,87 @@
-// server.js
-require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const session = require('express-session');
 const passport = require('passport');
 const path = require('path');
+require('dotenv').config(); // Load environment variables from .env file
 
 const app = express();
+
+// Middleware to parse JSON
 app.use(express.json());
 
 // ——————————————
 // 1) MONGO CONNECTION
 // ——————————————
-console.log('MONGO_URI:', process.env.MONGO_URI);
-mongoose.connect(process.env.MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+const MONGO_URI = process.env.MONGO_URI;
+if (!MONGO_URI) {
+  console.error('❌ MONGO_URI is not defined in .env file');
+  process.exit(1); // Exit the application if MONGO_URI is missing
+}
+
+mongoose
+  .connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('✅ Connected to MongoDB'))
-  .catch(err => console.error('❌ DB connection error:', err));
+  .catch((err) => {
+    console.error('❌ MongoDB connection error:', err);
+    process.exit(1); // Exit the application if MongoDB connection fails
+  });
 
 // ——————————————
 // 2) SESSION + PASSPORT SETUP
 // ——————————————
-// (a) Session middleware
-app.use(session({
-  secret: process.env.SESSION_SECRET,
-  resave: false,
-  saveUninitialized: false
-}));
+const SESSION_SECRET = process.env.SESSION_SECRET;
+if (!SESSION_SECRET) {
+  console.error('❌ SESSION_SECRET is not defined in .env file');
+  process.exit(1); // Exit the application if SESSION_SECRET is missing
+}
 
-// (b) Passport init
+app.use(
+  session({
+    secret: SESSION_SECRET,
+    resave: false,
+    saveUninitialized: false,
+  })
+);
+
+// Initialize Passport
 app.use(passport.initialize());
 app.use(passport.session());
-
-// (c) Load your Passport strategy config
-require('./config/passport');
+require('./config/passport'); // Ensure Passport is configured in this file
 
 // ——————————————
 // 3) ROUTES
 // ——————————————
-// (a) Google OAuth endpoints
-app.use('/auth', require('./routes/auths'));
-
-// (b) Your existing user API
-app.use('/api/users', require('./routes/userRoutes'));
-
-// (c) Test or protected route
-app.get('/', (req, res) => {
-  res.send(req.user
-    ? `Hello ${req.user.name}!`
-    : 'Hello from TaskWhiz backend!'
-  );
-});
-
+// Google OAuth routes
 app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
 
 app.get(
   '/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
   (req, res) => {
-    // Successful authentication
-    res.redirect('/dashboard'); // Redirect to a protected route
+    res.redirect('/dashboard'); // Redirect to a protected route after successful login
   }
 );
 
-// ——————————————
-// 4) SERVE FRONTEND
-// ——————————————
-console.log('Serving static files from:', path.join(__dirname, 'frontend'));
-app.use('/WhizFlow/frontend', express.static(path.join(__dirname, 'frontend')));
-
-// ——————————————
-// 5) TASK API
-// ——————————————
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on port ${PORT}`);
+// Example protected route
+app.get('/dashboard', (req, res) => {
+  if (!req.isAuthenticated()) {
+    return res.redirect('/');
+  }
+  res.send(`Welcome, ${req.user.displayName}`);
 });
 
-const express = require('express');
-const mongoose = require('mongoose');
-const port = 3000;
+// ——————————————
+// 4) SERVE STATIC FILES
+// ——————————————
+app.use('/WhizFlow/frontend', express.static(path.join(__dirname, '../frontend')));
 
-app.use(express.json());
-
-mongoose.connect('mongodb://localhost:27017/whizflow', { userNewUrParser: true, useUnifiedTopology: true })
-    .then (() => console.log('MongoDB connected'))
-    .catch(err => console.error('failed to connect to MongoDB', err));
-const taskScheme = new mongoose.Schema({
-    task: {type: String, required: true},
-    createdAt: {type: Date, default: Date.npw}
-});
-const Task = mongoose.model('Task', taskSchema);
-
-app.post('/api/tasks', async (req, res) => {
-  const { task } = req.body;
-  if (!task || task.trim() === '') {
-    return res.status(400).json({ error: 'Task description is required' });
-  }
-
-  try {
-    const newTask = new Task({ task });
-    await newTask.save();
-
-    res.status(201).json({ message: 'Task created successfully', task: newTask });
-  } catch (error) {
-    res.status(500).json({ error: 'Failed to create task. Please try again later', details: error.message });
-  }
+// ——————————————
+// 5) ERROR HANDLING
+// ——————————————
+app.use((err, req, res, next) => {
+  console.error('❌ Server error:', err);
+  res.status(500).send('Internal Server Error');
 });
 
 // ——————————————
@@ -112,5 +89,5 @@ app.post('/api/tasks', async (req, res) => {
 // ——————————————
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
-  console.log(`🚀 Backend running at http://localhost:${PORT}`);
+  console.log(`🚀 Server running on port ${PORT}`);
 });

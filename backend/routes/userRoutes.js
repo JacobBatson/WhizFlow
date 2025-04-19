@@ -1,10 +1,24 @@
 const express = require('express'); // handle routing in express
-const router = express.Router(); //difining routes  with mini express app
+const router = express.Router(); // defining routes with mini express app
 const User = require('../models/User');
-route.post('/', async (req, res) =>{ //define the route
-//lpulls data from body request
-    const existingUser = await User.findOne({googleID});
-    const {googleID, email, name , picture} = req.body
+
+router.post('/', async (req, res) => { // define the route
+    // pulls data from body request
+    const { googleId, email, name, picture } = req.body;
+    try {
+        const existingUser = await User.findOne({ googleId });
+        let user;
+        if (existingUser) {
+            user = existingUser;
+        } else {
+            user = new User({ googleId, email, name, picture });
+            await user.save();
+        }
+        res.status(200).json({ message: 'User saved', user });
+    } catch (error) {
+        res.status(500).json({ message: 'Server error', error: error.message });
+    }
 });
-MediaSourceHandle.exports = router;
+
+module.exports = router;
 

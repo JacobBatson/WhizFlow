@@ -1,24 +1,27 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <title>WhizFlow</title>
-    <link rel="stylesheet" href="styles.css" />
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>WhizFlow</title>
+  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
 </head>
 <body>
-    <div class="container">
-        <h1>🚀 WhizFlow</h1>
-        <p>Turn your thoughts into automated actions.</p>
+  <div class="container">
+    <h1>🚀 WhizFlow</h1>
+    <p>Turn your thoughts into automated actions.</p>
 
-        <form id="taskForm">
-            <input type="text" id="taskInput" placeholder="What would you like me to automate?" />
-            <button type="submit">✨ Create Task</button>
-        </form>
+    <form id="taskForm">
+      <input type="text" id="taskInput" placeholder="What would you like me to automate?" />
+      <button type="submit"><i class="fa fa-magic"></i> Create Task</button>
+    </form>
 
-        <div id="feedback"></div>
-    </div>
+    <div id="loader" class="spinner" style="display: none;"></div>
+    <div id="feedback"></div>
+    <div id="history" class="task-history"></div>
+  </div>
 
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

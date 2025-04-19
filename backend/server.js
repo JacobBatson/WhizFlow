@@ -96,7 +96,7 @@ app.post('/api/tasks', async (req, res) => {
 // ——————————————
 // 6) START SERVER
 // ——————————————
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Backend running at http://localhost:${PORT}`);
 });

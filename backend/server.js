@@ -20,7 +20,8 @@ if (!MONGO_URI) {
   console.error('❌ MONGO_URI is not defined in .env file');
   process.exit(1);
 }
-mongoose.connect(MONGO_URI, { useNewUrlParser: true, useUnifiedTopology: true })
+mongoose
+  .connect(MONGO_URI, { useNewUrlParser: true })
   .then(() => console.log('✅ Connected to MongoDB'))
   .catch((err) => {
     console.error('❌ MongoDB connection error:', err);
@@ -47,22 +48,24 @@ app.use(passport.session());
 require('./config/passport');
 
 // ——————————————
-// 3) SERVE STATIC FRONTEND
+// 3) SERVE STATIC FRONTEND ASSETS
 // ——————————————
+app.use(express.static(path.join(__dirname, '../frontend')));
 
-app.use(
-  express.static(
-    path.join(__dirname, '../frontend'),
-    { index: 'login.html' }
-  )
-);
-// Serve login.html at root
+// ——————————————
+// 4) ROOT ROUTE: LOGIN OR MAIN PAGE
+// ——————————————
 app.get('/', (req, res) => {
+  if (req.isAuthenticated()) {
+    // Show main app (index.html) after login
+    return res.sendFile(path.join(__dirname, '../frontend', 'index.html'));
+  }
+  // Otherwise show login page
   res.sendFile(path.join(__dirname, '../frontend', 'login.html'));
 });
 
 // ——————————————
-// 4) GOOGLE OAUTH ROUTES
+// 5) GOOGLE OAUTH ROUTES
 // ——————————————
 app.get(
   '/auth/google',
@@ -79,19 +82,21 @@ app.get(
   })
 );
 
-app.get('/auth/google/callback',
+app.get(
+  '/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
-  (req, res) => res.redirect('/ask')
+  (req, res) => {
+    // Redirect back to root, which will now serve index.html
+    res.redirect('/');
+  }
 );
 
-// ——————————————
-// 5) PROTECTED DASHBOARD ROUTE
-// ——————————————
-app.get('/dashboard', (req, res) => {
-  if (!req.isAuthenticated()) {
-    return res.redirect('/');
-  }
-  res.send(`Welcome, ${req.user.displayName}`);
+// Optional: logout
+app.get('/logout', (req, res, next) => {
+  req.logout(err => {
+    if (err) return next(err);
+    res.redirect('/');
+  });
 });
 
 // ——————————————
@@ -102,12 +107,10 @@ app.use((err, req, res, next) => {
   res.status(500).send('Internal Server Error');
 });
 
-
-
 // ——————————————
 // 7) START SERVER
 // ——————————————
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => {
+app.listen(PORT, '0.0.0.0', () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });

@@ -4,21 +4,44 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
   <title>WhizFlow – Login</title>
-  <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
   <style>
+    :root {
+      --bg-gradient: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+      --container-bg: #ffffffcc;
+      --text-color: #2d3748;
+      --subtext-color: #4a5568;
+      --google-blue: #4285f4;
+      --google-blue-hover: #3367d6;
+    }
+
+    body.dark {
+      --bg-gradient: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
+      --container-bg: #1e1e1ecc;
+      --text-color: #f0f0f0;
+      --subtext-color: #a0aec0;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
     body {
       font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-      background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+      background: var(--bg-gradient);
       display: flex;
       justify-content: center;
       align-items: center;
       height: 100vh;
-      color: #333;
       padding: 20px;
+      color: var(--text-color);
+      transition: background 0.4s ease, color 0.4s ease;
     }
 
     .container {
-      background-color: #ffffffcc;
+      background-color: var(--container-bg);
       padding: 40px;
       border-radius: 16px;
       box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
@@ -26,24 +49,40 @@
       max-width: 420px;
       width: 100%;
       backdrop-filter: blur(10px);
+      position: relative;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
 
     h1 {
       font-size: 2.4rem;
       margin-bottom: 15px;
-      color: #2d3748;
+      color: var(--text-color);
     }
 
     p {
       font-size: 1.1rem;
       margin-bottom: 25px;
-      color: #4a5568;
+      color: var(--subtext-color);
     }
 
     .google-btn {
-      display: inline-block;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 10px;
       padding: 14px 20px;
-      background-color: #4285f4;
+      background-color: var(--google-blue);
       color: white;
       text-decoration: none;
       border-radius: 8px;
@@ -53,15 +92,57 @@
     }
 
     .google-btn:hover {
-      background-color: #3367d6;
+      background-color: var(--google-blue-hover);
+    }
+
+    .toggle-btn {
+      position: absolute;
+      top: 15px;
+      right: 15px;
+      background: none;
+      border: none;
+      color: var(--text-color);
+      cursor: pointer;
+      font-size: 1.2rem;
+      transition: color 0.3s ease;
+    }
+
+    .toggle-btn:hover {
+      color: #666;
+    }
+
+    @media (max-width: 480px) {
+      h1 {
+        font-size: 1.8rem;
+      }
+
+      p, .google-btn {
+        font-size: 0.95rem;
+      }
     }
   </style>
 </head>
 <body>
   <div class="container">
+    <button id="themeToggle" class="toggle-btn" title="Toggle dark mode">
+      <i class="fas fa-moon"></i>
+    </button>
     <h1>🚀 WhizFlow</h1>
     <p>Please sign in to continue</p>
-    <a id="google-signin" href="/auth/google" class="google-btn">Sign in with Google</a>
+    <a id="google-signin" href="/auth/google" class="google-btn">
+      <i class="fab fa-google"></i> Sign in with Google
+    </a>
   </div>
+
+  <script>
+    const toggleBtn = document.getElementById('themeToggle');
+    const icon = toggleBtn.querySelector('i');
+
+    toggleBtn.addEventListener('click', () => {
+      document.body.classList.toggle('dark');
+      icon.classList.toggle('fa-moon');
+      icon.classList.toggle('fa-sun');
+    });
+  </script>
 </body>
 </html>

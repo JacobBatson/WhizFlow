@@ -49,7 +49,13 @@ require('./config/passport');
 // ——————————————
 // 3) SERVE STATIC FRONTEND
 // ——————————————
-app.use(express.static(path.join(__dirname, '../frontend')));
+
+app.use(
+  express.static(
+    path.join(__dirname, '../frontend'),
+    { index: 'login.html' }
+  )
+);
 // Serve login.html at root
 app.get('/', (req, res) => {
   res.sendFile(path.join(__dirname, '../frontend', 'login.html'));

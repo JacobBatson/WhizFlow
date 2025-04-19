@@ -76,3 +76,36 @@ const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
+
+const express = require('express');
+const mongoose = require('mongoose');
+const port = 3000;
+
+app.use(express.json());
+
+mongoose.connect('mongodb://localhost:27017/whizflow', { userNewUrParser: true, useUnifiedTopology: true })
+    .then (() => console.log('MongoDB connected'))
+    .catch(err => console.error('failed to connect to MongoDB', err));
+const taskScheme = new mongoose.Schema({
+    task: {type: String, required: true},
+    createdAt: {type: Date, default: Date.npw}
+});
+const Task = mongoose.model('Task', taskScheme);
+app.post('/api/tasks', async (req, res) => {
+    const{ task } = re.body;
+    if(!task || task.trim() === ''){
+        return res.status(400).jason({error: 'Task description is required'});
+    }
+
+    try {
+        const newTask = new Task({ task});
+        await newTask.save();
+
+        res.status(201).json({ message: 'Task created successfully', task: newTask });
+    } catch (error){
+        res.status(500).jsaon({ eroor: 'failed to create task. Please try again later', error: error.message });
+    }
+});
+app.listen(port, () => {
+    console.log('Backenndd runnong at http://localhost;${port}');
+})

@@ -39,10 +39,10 @@ require('./config/passport');
 // 3) ROUTES
 // ——————————————
 // (a) Google OAuth endpoints
-app.use('/auth', require('./backend/routes/auth'));
+app.use('/auth', require('./routes/auths'));
 
 // (b) Your existing user API
-app.use('/api/users', require('./backend/routes/userRoutes'));
+app.use('/api/users', require('./routes/userRoutes'));
 
 // (c) Test or protected route
 app.get('/', (req, res) => {

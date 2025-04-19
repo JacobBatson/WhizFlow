@@ -25,4 +25,3 @@ passport.use(new Strategy({
     done(null, user);
   }
 ));
-a

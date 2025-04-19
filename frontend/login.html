@@ -1,27 +1,67 @@
-<!-- frontend/login.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>WhizFlow – Login</title>
+  <title>WhizFlow – Login</title>
   <link rel="stylesheet" href="styles.css" />
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      color: #333;
+      padding: 20px;
+    }
+
+    .container {
+      background-color: #ffffffcc;
+      padding: 40px;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
+      text-align: center;
+      max-width: 420px;
+      width: 100%;
+      backdrop-filter: blur(10px);
+    }
+
+    h1 {
+      font-size: 2.4rem;
+      margin-bottom: 15px;
+      color: #2d3748;
+    }
+
+    p {
+      font-size: 1.1rem;
+      margin-bottom: 25px;
+      color: #4a5568;
+    }
+
+    .google-btn {
+      display: inline-block;
+      padding: 14px 20px;
+      background-color: #4285f4;
+      color: white;
+      text-decoration: none;
+      border-radius: 8px;
+      font-size: 1rem;
+      font-weight: 500;
+      transition: background-color 0.3s ease;
+    }
+
+    .google-btn:hover {
+      background-color: #3367d6;
+    }
+  </style>
 </head>
 <body>
   <div class="container">
     <h1>🚀 WhizFlow</h1>
     <p>Please sign in to continue</p>
-    <a href="/auth/google">
-    <button id="google-signin">Sign in with Google</button>
-    </a>
+    <a id="google-signin" href="/auth/google" class="google-btn">Sign in with Google</a>
   </div>
-
-  <script>
-    document
-      .getElementById('google-signin')
-      .addEventListener('click', () => {
-        window.location.href = '/auth/google';
-      });
-  </script>
 </body>
 </html>

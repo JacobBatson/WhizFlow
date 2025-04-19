@@ -33,7 +33,7 @@ app.use(passport.session());
 
 // (c) Load your Passport strategy config
 //    Create this file next (see below)
-require('./backend/config/passport');
+require('./config/passport');
 
 // ——————————————
 // 3) ROUTES

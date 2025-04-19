@@ -67,12 +67,12 @@ app.get(
 // 4) SERVE FRONTEND
 // ——————————————
 console.log('Serving static files from:', path.join(__dirname, 'frontend'));
-app.use(express.static(path.join(__dirname, 'frontend')));
+app.use('/WhizFlow/frontend', express.static(path.join(__dirname, 'frontend')));
 
 // ——————————————
 // 5) START SERVER
 // ——————————————
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 5500;
 app.listen(PORT, () => {
   console.log(`🚀 Server running on port ${PORT}`);
 });
@@ -107,5 +107,5 @@ app.post('/api/tasks', async (req, res) => {
     }
 });
 app.listen(port, () => {
-    console.log('Backenndd runnong at http://localhost;${port}');
+    console.log('Backend running at http://localhost;${port}');
 })

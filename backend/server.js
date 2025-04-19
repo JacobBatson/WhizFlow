@@ -79,13 +79,9 @@ app.get(
   })
 );
 
-app.get(
-  '/auth/google/callback',
+app.get('/auth/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
-  (req, res) => {
-    // Successful authentication
-    res.redirect('/dashboard');
-  }
+  (req, res) => res.redirect('/ask')
 );
 
 // ——————————————

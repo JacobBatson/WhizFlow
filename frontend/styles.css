@@ -1,77 +1,179 @@
-
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
-}
-
-body {
-    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-    background-color: #f9fafb;
+  }
+  
+  body {
+    font-family: 'Poppins', 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, #f6d365 0%, #fda085 100%);
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
-    color: #360707;
-}
-
-.container {
+    animation: fadeIn 1s ease-in-out;
+    color: #333;
+  }
+  
+  .container {
     text-align: center;
-    background-color: #fff;
-    padding: 40px;
-    border-radius: 12px;
-    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.1);
+    background-color: #ffffff;
+    padding: 50px 40px;
+    border-radius: 16px;
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
     width: 100%;
-    max-width: 400px;
-}
-
-h1 {
-    color: #1a202c;
-    font-size: 2rem;
-    margin-bottom: 20px;
-}
-
-p {
+    max-width: 420px;
+    transition: transform 0.3s ease;
+  }
+  
+  .container:hover {
+    transform: scale(1.01);
+  }
+  
+  h1 {
+    font-size: 2.5rem;
+    color: #2d3748;
+    margin-bottom: 16px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 12px;
+  }
+  
+  p {
     color: #4a5568;
-    font-size: 1rem;
-    margin-bottom: 20px;
-}
-
-#taskForm {
+    font-size: 1.1rem;
+    margin-bottom: 30px;
+  }
+  
+  #taskForm {
     display: flex;
     flex-direction: column;
-}
-
-#taskInput {
-    padding: 12px;
-    border: 1px solid #e2e8f0;
-    border-radius: 8px;
-    margin-bottom: 12px;
+    gap: 15px;
+  }
+  
+  #taskInput {
+    padding: 14px;
+    border: 2px solid #e2e8f0;
+    border-radius: 10px;
     font-size: 1rem;
+    transition: border-color 0.3s, box-shadow 0.3s;
+  }
+  
+  #taskInput:focus {
+    border-color: #63b3ed;
+    box-shadow: 0 0 0 4px rgba(100, 149, 237, 0.2);
     outline: none;
-    transition: border-color 0.3s;
-}
-
-#taskInput:focus {
-    border-color: #4fd1c5;
-}
-
-button {
-    padding: 12px 20px;
-    background-color: #4fd1c5;
+  }
+  
+  button {
+    padding: 14px;
+    background: linear-gradient(to right, #667eea, #764ba2);
     color: #fff;
     border: none;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 1rem;
     cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #38b2ac;
-}
-
-#feedback {
+    transition: background 0.3s, transform 0.2s;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+  }
+  
+  button:hover {
+    background: linear-gradient(to right, #5a67d8, #6b46c1);
+    transform: scale(1.02);
+  }
+  
+  #feedback {
     margin-top: 20px;
     font-size: 1rem;
-}
+    font-weight: 500;
+    opacity: 0;
+    animation: fadeFeedback 0.6s forwards;
+  }
+  
+  /* Task List Container */
+  #taskListContainer {
+    margin-top: 30px;
+    text-align: left;
+  }
+  
+  #taskListContainer h2 {
+    font-size: 1.3rem;
+    color: #2d3748;
+    margin-bottom: 12px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  #taskList {
+    list-style: none;
+    padding-left: 0;
+  }
+  
+  #taskList li {
+    background-color: #f0f4f8;
+    padding: 12px 16px;
+    border-radius: 8px;
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    justify-content: space-between;
+    animation: fadeFeedback 0.5s ease-in-out;
+  }
+  
+  /* Task checkbox */
+  .task-checkbox {
+    transform: scale(1.2);
+    cursor: pointer;
+  }
+  
+  /* Task text */
+  #taskList li span {
+    flex-grow: 1;
+    font-size: 1rem;
+  }
+  
+  /* Completed task */
+  .completed {
+    text-decoration: line-through;
+    color: #999;
+  }
+  
+  /* Delete button */
+  .delete-btn {
+    background: transparent;
+    border: none;
+    color: #e53e3e;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: transform 0.2s ease;
+  }
+  
+  .delete-btn:hover {
+    transform: scale(1.2);
+  }
+  
+  /* Animations */
+  .slide-in {
+    animation: slideIn 1s ease-in-out;
+  }
+  
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+  
+  @keyframes fadeFeedback {
+    from { opacity: 0; transform: scale(0.9); }
+    to { opacity: 1; transform: scale(1); }
+  }
+  
+  @keyframes slideIn {
+    0% { transform: translateY(-50px); opacity: 0; }
+    100% { transform: translateY(0); opacity: 1; }
+  }

@@ -1,24 +1,36 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>WhizFlow</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>WhizFlow</title>
+
+  <!-- Google Font -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@500;700&display=swap" rel="stylesheet">
+
+  <!-- Font Awesome -->
+  <script src="https://kit.fontawesome.com/a076d05399.js" crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div class = "container">
-        <h1>🚀 WhizFlow</h1>
-        <p>Automate your life with us.</p>
+  <div class="container slide-in">
+    <h1><i class="fas fa-magic"></i>🚀 WhizFlow</h1>
+    <p>Turn your thoughts into automated actions.</p>
 
-        <form id="taskForm">
-            <input type="text" id="taskInput" placeholder="e.g. What would you like me to Automate">
-            <button type="submit">Submit</button>
-        </form>
+    <form id="taskForm">
+      <input type="text" id="taskInput" placeholder="What would you like me to automate?" />
+      <button type="submit"><i class="fas fa-plus-circle"></i> Create Task</button>
+    </form>
 
-        <div id="feedback"></div>
+    <div id="feedback"></div>
+
+    <div id="taskListContainer">
+      <h2><i class="fas fa-tasks"></i>✨ Your Tasks</h2>
+      <ul id="taskList"></ul>
     </div>
+  </div>
 
-    <script src="script.js"></script>
+  <script src="script.js"></script>
 </body>
 </html>

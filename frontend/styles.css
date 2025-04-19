@@ -147,4 +147,7 @@
       font-size: 0.95rem;
     }
   }
-  
+
+  #google-signin{
+    margin-left: 82px;
+  }

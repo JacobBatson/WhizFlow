@@ -7,7 +7,7 @@ router.get('/google',
 
 router.get('/google/callback',
   passport.authenticate('google', { failureRedirect: '/' }),
-  (req, res) => res.redirect('/')  // adjust redirect as you like
+  (req, res) => res.redirect('/')
 );
 
 module.exports = router;

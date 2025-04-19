@@ -59,3 +59,22 @@ function updateHistory(task) {
     <ul>${taskHistory.map(t => `<li>${t}</li>`).join('')}</ul>
   `;
 }
+
+// frontend/script.js
+
+(async function ensureLoggedIn() {
+    try {
+      const res = await fetch('/api/me');
+      const { user } = await res.json();
+      if (!user) {
+        // Not authenticated → send them to login page
+        return window.location.replace('/login.html');
+      }
+      // if user exists, you can optionally show their name somewhere:
+      console.log('Logged in as:', user.email);
+    } catch (err) {
+      console.error('Auth check failed:', err);
+      window.location.replace('/login.html');
+    }
+  })();
+  

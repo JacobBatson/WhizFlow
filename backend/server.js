@@ -52,9 +52,21 @@ app.get('/', (req, res) => {
   );
 });
 
+app.get('/auth/google', passport.authenticate('google', { scope: ['profile', 'email'] }));
+
+app.get(
+    '/auth/google/callback',
+    passport.authenticate('google', { failureRedirect: '/' }),
+    (req, res) => {
+      // Successful authentication
+      res.redirect('/dashboard'); // Redirect to a protected route
+    }
+);
+
 // ——————————————
 // 4) SERVE FRONTEND
 // ——————————————
+console.log('Serving static files from:', path.join(__dirname, 'frontend'));
 app.use(express.static(path.join(__dirname, 'frontend')));
 
 // ——————————————
